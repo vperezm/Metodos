@@ -23,6 +23,25 @@ function y= m_biseccion(f,a,b,eps,max_iter)
 endfunction
 
 // ----------------------------------------------------------------------------//
+// METODO DE NEWTON
+// f y f' continuas en [a,b]
+// alfa / f(alfa) = 0
+// x0 en [a,b] cercano a alfa y f'(x0) != 0
+function y = m_newton(f,x0,eps,max_iter)
+    iter = 1;
+    x = x0;
+    while (abs(f(x)) > eps) && (iter < max_iter)
+        x = x - f(x) / numderivative(f,x);
+        iter = iter + 1;
+    end
+    if iter == max_iter then
+        y = %nan;
+    else
+        y = x;
+    end
+endfunction
+
+// ----------------------------------------------------------------------------//
 // METODO DE LA SECANTE
 
 function y = m_secante(f,a,b,eps,max_iter)
@@ -43,23 +62,28 @@ function y = m_secante(f,a,b,eps,max_iter)
 endfunction
 
 // ----------------------------------------------------------------------------//
-// METODO DE NEWTON
-// f y f' continuas en [a,b]
-// alfa / f(alfa) = 0
-// x0 en [a,b] cercano a alfa y f'(x0) != 0
-function y = m_newton(f,x0,eps,max_iter)
+// METODO DE LA FALSA POSICION
+// f continua en [a,b] tal que f(a)f(b) < 0
+
+function y= m_falsa_posicion(f,a,b,eps,max_iter)
     iter = 1;
-    x = x0;
-    while (abs(f(x)) > eps) && (iter < max_iter)
-        x = x - f(x) / numderivative(f,x);
+    c = b - f(b)*(b-a)/(f(b)-f(a));
+    while (b-c > eps) && (f(c) ~= 0) && (iter < max_iter) 
+        if f(a)*f(c) < 0
+            b = c;
+        else
+            a = c;
+        end
+        c = b - f(b)*(b-a)/(f(b)-f(a));
         iter = iter + 1;
     end
     if iter == max_iter then
         y = %nan;
     else
-        y = x;
+        y = c;
     end
 endfunction
+
 
 // ----------------------------------------------------------------------------//
 // METODO DE PUNTO FIJO
