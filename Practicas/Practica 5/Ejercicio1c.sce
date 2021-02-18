@@ -2,6 +2,7 @@ clear
 clc
 // Agrego un máximo de iteraciones a los métodos, ya que por a) y b) se que
 // no puedo asegurar la convergencia
+// ESTO ESTA MAL. SI NO CONVERGE NO CONVERGE
 
 //------------------------------------------------------------------------------//
 // Método de Jacobi
